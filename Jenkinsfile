@@ -14,6 +14,7 @@ pipeline {
         stage('Docker Build & Test') {
             steps {
                 sh '''#!/bin/bash -l
+		if sudo docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi
 	        sudo docker build -t maven-app:test .
 		sudo docker run -d -p 80:8080 --name maven-app maven-app:test
 		sleep 10
