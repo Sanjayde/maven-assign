@@ -24,7 +24,7 @@ pipeline {
         }
         stage ('Docker Push ECR') {
             steps {
-                 sh 'sudo docker tag maven-app:test mavenrepo:latest 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
+                 sh 'sudo docker tag maven-app:test 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
 		 sh 'sudo docker push 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
        	    }
       }
