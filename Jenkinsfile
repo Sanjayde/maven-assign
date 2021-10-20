@@ -17,7 +17,8 @@ pipeline {
 	        sudo docker build -t maven-app:test .
 		sudo docker run -d -p 80:8080 --name maven-app maven-app:test
 		sleep 10
-		curl -s -o /dev/null -w %{http_code} 35.154.189.208
+		response=$(curl -s -o /dev/null -w %{http_code} 35.154.189.208)
+		if [ "$response != 200" ]; then exit 1; else exit 0; fi
 		sudo docker stop maven-app && sudo docker rm maven-app
 		'''
             }
@@ -27,6 +28,13 @@ pipeline {
                  sh 'sudo docker tag maven-app:test 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
 		 sh 'sudo docker push 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
        	    }
-      }
+        }
+	    
+	stage ('Docker Deploy') {
+            steps {
+		 sh 'if docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
+                 sh 'sudo docker run -d -p 80:8080 --name maven-app 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
+       	    }
+        }
     }
 }
