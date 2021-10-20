@@ -3,15 +3,14 @@ pipeline {
     tools {
         maven "maven"
     }
-    
-    stages ('Build') {
+    stages {
+	stage ('Build') {
             steps {
               dir("${WORKSPACE}") {
                 sh 'mvn -B -DskipTests clean package'
                 }
             }
         }
-    stages {
         stage('Test') {
             steps {
          
