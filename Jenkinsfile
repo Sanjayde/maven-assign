@@ -18,7 +18,7 @@ pipeline {
 		           
             }
         }
-      stages ('RUN') {
+      stage ('RUN') {
         steps {
                  sh 'docker run -d -p 8040:80 maven-app:v1'
        	    }
