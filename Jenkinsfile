@@ -14,13 +14,13 @@ pipeline {
         stage('Test') {
             steps {
          
-		            sh 'docker build -t maven-app:v1 .'
+		            sh 'sudo docker build -t maven-app:v1 .'
 		           
             }
         }
       stage ('RUN') {
         steps {
-                 sh 'docker run -d -p 8040:80 maven-app:v1'
+                 sh 'sudo docker run -d -p 8040:80 maven-app:v1'
        	    }
       }
     }
