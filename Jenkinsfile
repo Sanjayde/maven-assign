@@ -18,7 +18,7 @@ pipeline {
 		sudo docker run -d -p 80:8080 --name maven-app maven-app:test
 		sleep 10
 		response=$(curl -s -o /dev/null -w %{http_code} 35.154.189.208)
-		if [ "$response != 200" ]; then exit 1; else exit 0; fi
+		if [ "$response == 200" ]; then exit 0; else exit 1; fi
 		sudo docker stop maven-app && sudo docker rm maven-app
 		'''
             }
