@@ -4,7 +4,7 @@ pipeline {
         maven "maven"
     }
     
-    stage('Build') {
+    stages ('Build') {
             steps {
               dir("${WORKSPACE}") {
                 sh 'mvn -B -DskipTests clean package'
@@ -19,7 +19,7 @@ pipeline {
 		           
             }
         }
-      stage('RUN') {
+      stages ('RUN') {
         steps {
                  sh 'docker run -d -p 8040:80 maven-app:v1'
        	    }
