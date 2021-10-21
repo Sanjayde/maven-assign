@@ -1,10 +1,11 @@
 pipeline {
-    agent { label 'maven' }
+    agent none
     tools {
         maven "maven"
     }
     stages {
 	stage ('Build') {
+	agent { label 'maven' }
             steps {
               dir("${WORKSPACE}") {
                 sh 'mvn -B -DskipTests clean package'
@@ -12,6 +13,7 @@ pipeline {
             }
         }
         stage('Docker Build & Test') {
+	agent { label 'maven'}
             steps {
                 sh '''#!/bin/bash -l
 		if sudo docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi
@@ -25,6 +27,7 @@ pipeline {
             }
         }
         stage ('Docker Push ECR') {
+	agent { label 'maven'}
             steps {
                  sh 'sudo docker tag maven-app:test 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
 		 sh 'sudo docker push 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
@@ -32,6 +35,7 @@ pipeline {
         }
 	    
 	stage ('Docker Deploy') {
+	agent { label 'master'}
             steps {
 		 sh 'if sudo docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
                  sh 'sudo docker run -d -p 80:8080 --name maven-app 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
