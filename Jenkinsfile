@@ -29,8 +29,8 @@ pipeline {
         stage ('Docker Push ECR') {
 	agent { label 'maven'}
             steps {
-                 sh 'sudo docker tag maven-app:test 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
-		 sh 'sudo docker push 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
+		    sh 'sudo docker tag maven-app:test ${ECR_SERVER}:${BUILD_NUMBER}'
+		    sh 'sudo docker push ${ECR_SERVER}:${BUILD_NUMBER}'
        	    }
         }
 	    
@@ -38,7 +38,7 @@ pipeline {
 	agent { label 'master'}
             steps {
 		 sh 'if sudo docker ps -a | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
-                 sh 'sudo docker run -d -p 80:8080 --name maven-app 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
+		    sh 'sudo docker run -d -p 80:8080 --name maven-app ${ECR_SERVER}:${BUILD_NUMBER}'
        	    }
         }
     }
