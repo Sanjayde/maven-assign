@@ -16,7 +16,7 @@ pipeline {
 	agent { label 'maven'}
             steps {
                 sh '''#!/bin/bash -l
-		if sudo docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi
+		if sudo docker ps -a | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi
 	        sudo docker build -t maven-app:test .
 		sudo docker run -d -p 80:8080 --name maven-app maven-app:test
 		sleep 10
@@ -37,7 +37,7 @@ pipeline {
 	stage ('Docker Deploy') {
 	agent { label 'master'}
             steps {
-		 sh 'if sudo docker ps | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
+		 sh 'if sudo docker ps -a | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
                  sh 'sudo docker run -d -p 80:8080 --name maven-app 756033365011.dkr.ecr.ap-south-1.amazonaws.com/mavenrepo:${BUILD_NUMBER}'
        	    }
         }
