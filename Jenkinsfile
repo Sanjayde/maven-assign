@@ -35,7 +35,7 @@ pipeline {
         }
 	    
 	stage ('Docker Deploy') {
-	agent { label 'master'}
+	agent { label 'maven'}
             steps {
 		 sh 'if sudo docker ps -a | grep maven-app;then sudo docker stop maven-app && sudo docker rm maven-app; else exit 0; fi'
 		    sh 'sudo docker run -d -p 80:8080 --name maven-app ${ECR_SERVER}:${BUILD_NUMBER}'
