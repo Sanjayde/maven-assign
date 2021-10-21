@@ -1,7 +1,4 @@
 pipeline {
-	environment {
-		imagename = "testapp:v1"
-	}
     agent none
     tools {
         maven "maven"
