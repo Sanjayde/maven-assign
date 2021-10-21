@@ -1,6 +1,6 @@
 pipeline {
 	environment {
-		imagename = "test-app"
+		imagename = "testapp:v1"
 	}
     agent none
     tools {
