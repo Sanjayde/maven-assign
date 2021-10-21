@@ -1,4 +1,7 @@
 pipeline {
+	environment {
+		imagename = "test-app"
+	}
     agent none
     tools {
         maven "maven"
@@ -16,7 +19,7 @@ pipeline {
 	stage('Building image') {
       		steps{
         		script {
-          			dockerImage = docker.build test-app
+          			dockerImage = docker.build imagename
         		}
       		}
     	}	
